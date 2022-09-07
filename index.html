@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Folder | Google Drive</title>
+    
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="./assets/logo.png">
+    
+    <link rel="stylesheet" href="./assets/backend.min.css">
+    <link rel="stylesheet" href="./assets/all.min.css">
+    <link rel="stylesheet" href="./assets/line-awesome.min.css">
+    <link rel="stylesheet" href="./assets/remixicon.css">
+    
+    <!-- Viewer Plugin -->
+    <!--PDF-->
+    <link rel="stylesheet" href="./assets/pdf.viewer.css">
+    <!--Docs-->
+    <!--PPTX-->
+    <link rel="stylesheet" href="./assets/pptxjs.css">
+    <link rel="stylesheet" href="./assets/nv.d3.min.css">
+    <!--All Spreadsheet -->
+    <link rel="stylesheet" href="./assets/handsontable.full.min.css">
+    <!--Image viewer-->
+    <link rel="stylesheet" href="./assets/jquery.verySimpleImageViewer.css">
+    <!--officeToHtml-->
+    <link rel="stylesheet" href="./assets/officeToHtml.css">  
+    <style type="text/css">
+      .apexcharts-canvas {
+        position: relative;
+        user-select: none;
+        /* cannot give overflow: hidden as it will crop tooltips which overflow outside chart area */
+      }
+
+      /* scrollbar is not visible by default for legend, hence forcing the visibility */
+      .apexcharts-canvas ::-webkit-scrollbar {
+        -webkit-appearance: none;
+        width: 6px;
+      }
+      .apexcharts-canvas ::-webkit-scrollbar-thumb {
+        border-radius: 4px;
+        background-color: rgba(0,0,0,.5);
+        box-shadow: 0 0 1px rgba(255,255,255,.5);
+        -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
+      }
+      .apexcharts-canvas.dark {
+        background: #343F57;
+      }
+
+      .apexcharts-inner {
+        position: relative;
+      }
+
+      .legend-mouseover-inactive {
+        transition: 0.15s ease all;
+        opacity: 0.20;
+      }
+
+      .apexcharts-series-collapsed {
+        opacity: 0;
+      }
+
+      .apexcharts-gridline, .apexcharts-text {
+        pointer-events: none;
+      }
+
+      .apexcharts-tooltip {
+        border-radius: 5px;
+        box-shadow: 2px 2px 6px -4px #999;
+        cursor: default;
+        font-size: 14px;
+        left: 62px;
+        opacity: 0;
+        pointer-events: none;
+        position: absolute;
+        top: 20px;
+        overflow: hidden;
+        white-space: nowrap;
+        z-index: 12;
+        transition: 0.15s ease all;
+      }
+      .apexcharts-tooltip.light {
+        border: 1px solid #e3e3e3;
+        background: rgba(255, 255, 255, 0.96);
+      }
+      .apexcharts-tooltip.dark {
+        color: #fff;
+        background: rgba(30,30,30, 0.8);
+      }
+      .apexcharts-tooltip * {
+        font-family: inherit;
+      }
+
+      .apexcharts-tooltip .apexcharts-marker,
+      .apexcharts-area-series .apexcharts-area,
+      .apexcharts-line {
+        pointer-events: none;
+      }
+
+      .apexcharts-tooltip.active {
+        opacity: 1;
+        transition: 0.15s ease all;
+      }
+
+      .apexcharts-tooltip-title {
+        padding: 6px;
+        font-size: 15px;
+        margin-bottom: 4px;
+      }
+      .apexcharts-tooltip.light .apexcharts-tooltip-title {
+        background: #ECEFF1;
+        border-bottom: 1px solid #ddd;
+      }
+      .apexcharts-tooltip.dark .apexcharts-tooltip-title {
+        background: rgba(0, 0, 0, 0.7);
+        border-bottom: 1px solid #333;
+      }
+
+      .apexcharts-tooltip-text-value,
+      .apexcharts-tooltip-text-z-value {
+        display: inline-block;
+        font-weight: 600;
+        margin-left: 5px;
+      }
+
+      .apexcharts-tooltip-text-z-label:empty,
+      .apexcharts-tooltip-text-z-value:empty {
+        display: none;
+      }
+
+      .apexcharts-tooltip-text-value,
+      .apexcharts-tooltip-text-z-value {
+        font-weight: 600;
+      }
+
+      .apexcharts-tooltip-marker {
+        width: 12px;
+        height: 12px;
+        position: relative;
+        top: 0px;
+        margin-right: 10px;
+        border-radius: 50%;
+      }
+
+      .apexcharts-tooltip-series-group {
+        padding: 0 10px;
+        display: none;
+        text-align: left;
+        justify-content: left;
+        align-items: center;
+      }
+
+      .apexcharts-tooltip-series-group.active .apexcharts-tooltip-marker {
+        opacity: 1;
+      }
+      .apexcharts-tooltip-series-group.active, .apexcharts-tooltip-series-group:last-child {
+        padding-bottom: 4px;
+      }
+      .apexcharts-tooltip-series-group-hidden {
+        opacity: 0;
+        height: 0;
+        line-height: 0;
+        padding: 0 !important;
+      }
+      .apexcharts-tooltip-y-group {
+        padding: 6px 0 5px;
+      }
+      .apexcharts-tooltip-candlestick {
+        padding: 4px 8px;
+      }
+      .apexcharts-tooltip-candlestick > div {
+        margin: 4px 0;
+      }
+      .apexcharts-tooltip-candlestick span.value {
+        font-weight: bold;
+      }
+
+      .apexcharts-tooltip-rangebar {
+        padding: 5px 8px;
+      }
+
+      .apexcharts-tooltip-rangebar .category {
+        font-weight: 600;
+        color: #777;
+      }
+
+      .apexcharts-tooltip-rangebar .series-name {
+        font-weight: bold;
+        display: block;
+        margin-bottom: 5px;
+      }
+
+      .apexcharts-xaxistooltip {
+        opacity: 0;
+        padding: 9px 10px;
+        pointer-events: none;
+        color: #373d3f;
+        font-size: 13px;
+        text-align: center;
+        border-radius: 2px;
+        position: absolute;
+        z-index: 10;
+        background: #ECEFF1;
+        border: 1px solid #90A4AE;
+        transition: 0.15s ease all;
+      }
+
+      .apexcharts-xaxistooltip.dark {
+        background: rgba(0, 0, 0, 0.7);
+        border: 1px solid rgba(0, 0, 0, 0.5);
+        color: #fff;
+      }
+
+      .apexcharts-xaxistooltip:after, .apexcharts-xaxistooltip:before {
+        left: 50%;
+        border: solid transparent;
+        content: " ";
+        height: 0;
+        width: 0;
+        position: absolute;
+        pointer-events: none;
+      }
+
+      .apexcharts-xaxistooltip:after {
+        border-color: rgba(236, 239, 241, 0);
+        border-width: 6px;
+        margin-left: -6px;
+      }
+      .apexcharts-xaxistooltip:before {
+        border-color: rgba(144, 164, 174, 0);
+        border-width: 7px;
+        margin-left: -7px;
+      }
+
+      .apexcharts-xaxistooltip-bottom:after, .apexcharts-xaxistooltip-bottom:before {
+        bottom: 100%;
+      }
+
+      .apexcharts-xaxistooltip-top:after, .apexcharts-xaxistooltip-top:before {
+        top: 100%;
+      }
+
+      .apexcharts-xaxistooltip-bottom:after {
+        border-bottom-color: #ECEFF1;
+      }
+      .apexcharts-xaxistooltip-bottom:before {
+        border-bottom-color: #90A4AE;
+      }
+
+      .apexcharts-xaxistooltip-bottom.dark:after {
+        border-bottom-color: rgba(0, 0, 0, 0.5);
+      }
+      .apexcharts-xaxistooltip-bottom.dark:before {
+        border-bottom-color: rgba(0, 0, 0, 0.5);
+      }
+
+      .apexcharts-xaxistooltip-top:after {
+        border-top-color:#ECEFF1
+      }
+      .apexcharts-xaxistooltip-top:before {
+        border-top-color: #90A4AE;
+      }
+      .apexcharts-xaxistooltip-top.dark:after {
+        border-top-color:rgba(0, 0, 0, 0.5);
+      }
+      .apexcharts-xaxistooltip-top.dark:before {
+        border-top-color: rgba(0, 0, 0, 0.5);
+      }
+
+
+      .apexcharts-xaxistooltip.active {
+        opacity: 1;
+        transition: 0.15s ease all;
+      }
+
+      .apexcharts-yaxistooltip {
+        opacity: 0;
+        padding: 4px 10px;
+        pointer-events: none;
+        color: #373d3f;
+        font-size: 13px;
+        text-align: center;
+        border-radius: 2px;
+        position: absolute;
+        z-index: 10;
+        background: #ECEFF1;
+        border: 1px solid #90A4AE;
+      }
+
+      .apexcharts-yaxistooltip.dark {
+        background: rgba(0, 0, 0, 0.7);
+        border: 1px solid rgba(0, 0, 0, 0.5);
+        color: #fff;
+      }
+
+      .apexcharts-yaxistooltip:after, .apexcharts-yaxistooltip:before {
+        top: 50%;
+        border: solid transparent;
+        content: " ";
+        height: 0;
+        width: 0;
+        position: absolute;
+        pointer-events: none;
+      }
+      .apexcharts-yaxistooltip:after {
+        border-color: rgba(236, 239, 241, 0);
+        border-width: 6px;
+        margin-top: -6px;
+      }
+      .apexcharts-yaxistooltip:before {
+        border-color: rgba(144, 164, 174, 0);
+        border-width: 7px;
+        margin-top: -7px;
+      }
+
+      .apexcharts-yaxistooltip-left:after, .apexcharts-yaxistooltip-left:before {
+        left: 100%;
+      }
+
+      .apexcharts-yaxistooltip-right:after, .apexcharts-yaxistooltip-right:before {
+        right: 100%;
+      }
+
+      .apexcharts-yaxistooltip-left:after {
+        border-left-color: #ECEFF1;
+      }
+      .apexcharts-yaxistooltip-left:before {
+        border-left-color: #90A4AE;
+      }
+      .apexcharts-yaxistooltip-left.dark:after {
+        border-left-color: rgba(0, 0, 0, 0.5);
+      }
+      .apexcharts-yaxistooltip-left.dark:before {
+        border-left-color: rgba(0, 0, 0, 0.5);
+      }
+
+      .apexcharts-yaxistooltip-right:after {
+        border-right-color: #ECEFF1;
+      }
+      .apexcharts-yaxistooltip-right:before {
+        border-right-color: #90A4AE;
+      }
+      .apexcharts-yaxistooltip-right.dark:after {
+        border-right-color: rgba(0, 0, 0, 0.5);
+      }
+      .apexcharts-yaxistooltip-right.dark:before {
+        border-right-color: rgba(0, 0, 0, 0.5);
+      }
+
+      .apexcharts-yaxistooltip.active {
+        opacity: 1;
+      }
+      .apexcharts-yaxistooltip-hidden {
+        display: none;
+      }
+
+      .apexcharts-xcrosshairs, .apexcharts-ycrosshairs {
+        pointer-events: none;
+        opacity: 0;
+        transition: 0.15s ease all;
+      }
+
+      .apexcharts-xcrosshairs.active, .apexcharts-ycrosshairs.active {
+        opacity: 1;
+        transition: 0.15s ease all;
+      }
+
+      .apexcharts-ycrosshairs-hidden {
+        opacity: 0;
+      }
+
+      .apexcharts-zoom-rect {
+        pointer-events: none;
+      }
+      .apexcharts-selection-rect {
+        cursor: move;
+      }
+
+      .svg_select_points, .svg_select_points_rot {
+        opacity: 0;
+        visibility: hidden;
+      }
+      .svg_select_points_l, .svg_select_points_r {
+        cursor: ew-resize;
+        opacity: 1;
+        visibility: visible;
+        fill: #888;
+      }
+      .apexcharts-canvas.zoomable .hovering-zoom {
+        cursor: crosshair
+      }
+      .apexcharts-canvas.zoomable .hovering-pan {
+        cursor: move
+      }
+
+      .apexcharts-xaxis,
+      .apexcharts-yaxis {
+        pointer-events: none;
+      }
+
+      .apexcharts-zoom-icon,
+      .apexcharts-zoom-in-icon,
+      .apexcharts-zoom-out-icon,
+      .apexcharts-reset-zoom-icon,
+      .apexcharts-pan-icon,
+      .apexcharts-selection-icon,
+      .apexcharts-menu-icon,
+      .apexcharts-toolbar-custom-icon {
+        cursor: pointer;
+        width: 20px;
+        height: 20px;
+        line-height: 24px;
+        color: #6E8192;
+        text-align: center;
+      }
+
+
+      .apexcharts-zoom-icon svg,
+      .apexcharts-zoom-in-icon svg,
+      .apexcharts-zoom-out-icon svg,
+      .apexcharts-reset-zoom-icon svg,
+      .apexcharts-menu-icon svg {
+        fill: #6E8192;
+      }
+      .apexcharts-selection-icon svg {
+        fill: #444;
+        transform: scale(0.76)
+      }
+
+      .dark .apexcharts-zoom-icon svg,
+      .dark .apexcharts-zoom-in-icon svg,
+      .dark .apexcharts-zoom-out-icon svg,
+      .dark .apexcharts-reset-zoom-icon svg,
+      .dark .apexcharts-pan-icon svg,
+      .dark .apexcharts-selection-icon svg,
+      .dark .apexcharts-menu-icon svg,
+      .dark .apexcharts-toolbar-custom-icon svg{
+        fill: #f3f4f5;
+      }
+
+      .apexcharts-canvas .apexcharts-zoom-icon.selected svg,
+      .apexcharts-canvas .apexcharts-selection-icon.selected svg,
+      .apexcharts-canvas .apexcharts-reset-zoom-icon.selected svg {
+        fill: #008FFB;
+      }
+      .light .apexcharts-selection-icon:not(.selected):hover svg,
+      .light .apexcharts-zoom-icon:not(.selected):hover svg,
+      .light .apexcharts-zoom-in-icon:hover svg,
+      .light .apexcharts-zoom-out-icon:hover svg,
+      .light .apexcharts-reset-zoom-icon:hover svg,
+      .light .apexcharts-menu-icon:hover svg {
+        fill: #333;
+      }
+
+      .apexcharts-selection-icon, .apexcharts-menu-icon {
+        position: relative;
+      }
+      .apexcharts-reset-zoom-icon {
+        margin-left: 5px;
+      }
+      .apexcharts-zoom-icon, .apexcharts-reset-zoom-icon, .apexcharts-menu-icon {
+        transform: scale(0.85);
+      }
+
+      .apexcharts-zoom-in-icon, .apexcharts-zoom-out-icon {
+        transform: scale(0.7)
+      }
+
+      .apexcharts-zoom-out-icon {
+        margin-right: 3px;
+      }
+
+      .apexcharts-pan-icon {
+        transform: scale(0.62);
+        position: relative;
+        left: 1px;
+        top: 0px;
+      }
+      .apexcharts-pan-icon svg {
+        fill: #fff;
+        stroke: #6E8192;
+        stroke-width: 2;
+      }
+      .apexcharts-pan-icon.selected svg {
+        stroke: #008FFB;
+      }
+      .apexcharts-pan-icon:not(.selected):hover svg {
+        stroke: #333;
+      }
+
+      .apexcharts-toolbar {
+        position: absolute;
+        z-index: 11;
+        top: 0px;
+        right: 3px;
+        max-width: 176px;
+        text-align: right;
+        border-radius: 3px;
+        padding: 0px 6px 2px 6px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .apexcharts-toolbar svg {
+        pointer-events: none;
+      }
+
+      .apexcharts-menu {
+        background: #fff;
+        position: absolute;
+        top: 100%;
+        border: 1px solid #ddd;
+        border-radius: 3px;
+        padding: 3px;
+        right: 10px;
+        opacity: 0;
+        min-width: 110px;
+        transition: 0.15s ease all;
+        pointer-events: none;
+      }
+
+      .apexcharts-menu.open {
+        opacity: 1;
+        pointer-events: all;
+        transition: 0.15s ease all;
+      }
+
+      .apexcharts-menu-item {
+        padding: 6px 7px;
+        font-size: 12px;
+        cursor: pointer;
+      }
+      .light .apexcharts-menu-item:hover {
+        background: #eee;
+      }
+      .dark .apexcharts-menu {
+        background: rgba(0, 0, 0, 0.7);
+        color: #fff;
+      }
+
+      @media screen and (min-width: 768px) {
+        .apexcharts-toolbar {
+          /*opacity: 0;*/
+        }
+
+        .apexcharts-canvas:hover .apexcharts-toolbar {
+          opacity: 1;
+        }
+      }
+
+      .apexcharts-datalabel.hidden {
+        opacity: 0;
+      }
+
+      .apexcharts-pie-label,
+      .apexcharts-datalabel, .apexcharts-datalabel-label, .apexcharts-datalabel-value {
+        cursor: default;
+        pointer-events: none;
+      }
+
+      .apexcharts-pie-label-delay {
+        opacity: 0;
+        animation-name: opaque;
+        animation-duration: 0.3s;
+        animation-fill-mode: forwards;
+        animation-timing-function: ease;
+      }
+
+      .apexcharts-canvas .hidden {
+        opacity: 0;
+      }
+
+      .apexcharts-hide .apexcharts-series-points {
+        opacity: 0;
+      }
+
+      .apexcharts-area-series .apexcharts-series-markers .apexcharts-marker.no-pointer-events,
+      .apexcharts-line-series .apexcharts-series-markers .apexcharts-marker.no-pointer-events, .apexcharts-radar-series path, .apexcharts-radar-series polygon {
+        pointer-events: none;
+      }
+
+      /* markers */
+
+      .apexcharts-marker {
+        transition: 0.15s ease all;
+      }
+
+      @keyframes opaque {
+        0% {
+          opacity: 0;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+
+      /* Resize generated styles */
+      @keyframes resizeanim {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 0;
+        }
+      }
+
+      .resize-triggers {
+        animation: 1ms resizeanim;
+        visibility: hidden;
+        opacity: 0;
+      }
+
+      .resize-triggers, .resize-triggers > div, .contract-trigger:before {
+        content: " ";
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        overflow: hidden;
+      }
+
+      .resize-triggers > div {
+        background: #eee;
+        overflow: auto;
+      }
+
+      .contract-trigger:before {
+        width: 200%;
+        height: 200%;
+      }
+      </style><style id="smooth-scrollbar-style">
+      [data-scrollbar] {
+        display: block;
+        position: relative;
+      }
+
+      .scroll-content {
+        -webkit-transform: translate3d(0, 0, 0);
+                transform: translate3d(0, 0, 0);
+      }
+
+      .scrollbar-track {
+        position: absolute;
+        opacity: 0;
+        z-index: 1;
+        background: rgba(222, 222, 222, .75);
+        -webkit-user-select: none;
+           -moz-user-select: none;
+            -ms-user-select: none;
+                user-select: none;
+        -webkit-transition: opacity 0.5s 0.5s ease-out;
+                transition: opacity 0.5s 0.5s ease-out;
+      }
+      .scrollbar-track.show,
+      .scrollbar-track:hover {
+        opacity: 1;
+        -webkit-transition-delay: 0s;
+                transition-delay: 0s;
+      }
+
+      .scrollbar-track-x {
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 8px;
+      }
+      .scrollbar-track-y {
+        top: 0;
+        right: 0;
+        width: 8px;
+        height: 100%;
+      }
+      .scrollbar-thumb {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 8px;
+        height: 8px;
+        background: rgba(0, 0, 0, .5);
+        border-radius: 4px;
+      }
+    </style>
+  </head>
+  <body class="">
+    <!-- loader Start -->
+    <div id="loading" style="display: none;">
+      <div id="loading-center">
+      </div>
+    </div>
+    <!-- loader END -->
+    <!-- Wrapper Start -->
+    <div class="wrapper">
+      <div class="iq-sidebar  sidebar-default ">
+          <div class="iq-sidebar-logo d-flex align-items-center justify-content-between">
+              <a href="" class="header-logo">
+                  <img src="./assets/logo.png" class="img-fluid rounded-normal light-logo" alt="logo">
+                  <img src="./assets/logo.png" class="img-fluid rounded-normal darkmode-logo d-none" alt="logo">
+              </a>
+              <span style="margin-right: 100px; font-size: 30px;">Drive</span>
+              <div class="iq-menu-bt-sidebar">
+                  <i class=" wrapper-menu"><svg class="a-s-fa-Ha-pa" width="24px" height="24px" viewBox="0 0 24 24" focusable="false" fill="#000000"><path d="M3,5v14h18V5H3z M7,7v2H5V7H7z M5,13v-2h2v2H5z M5,15h2v2H5V15z M19,17H9v-2h10V17z M19,13H9v-2h10V13z M19,9H9V7h10V9z"></path></svg></i>
+              </div>
+          </div>
+          <div class="data-scrollbar" data-scroll="1" data-scrollbar="true" tabindex="-1" style="overflow: hidden; outline: none;"><div class="scroll-content">
+              <div class="new-create select-dropdown input-prepend input-append">
+                  <div class="btn-group">
+                      <label data-toggle="dropdown">
+                      <div class="search-query selet-caption">
+                        <svg focusable="false" height="24px" viewBox="0 0 24 24" width="24px" xmlns="http://www.w3.org/2000/svg"><img src="./assets/plus.svg">
+                        Create New
+                      </div>
+                      <span class="search-replace"></span>
+                      <span class="caret"><!--icon--></span>
+                      </label>
+                  </div>
+              </div>
+              <nav class="iq-sidebar-menu">
+                  <ul id="iq-sidebar-toggle" class="iq-menu">
+                       <li class=" ">
+                          <a href="" class="collapsed" data-toggle="collapse" aria-expanded="false">
+                            <svg class="a-s-fa-Ha-pa" width="20px" height="20px" viewBox="0 0 20 20" focusable="false" fill="#000000"><polygon points="8,5 13,10 8,15"></polygon></svg>
+                            <svg style="padding-right: 20px;" padding-right: 20px;width="24px" height="24px" viewBox="0 0 24 24" fill="#000000" focusable="false"><path d="M19 2H5C3.9 2 3 2.9 3 4V20C3 21.1 3.9 22 5 22H19C20.1 22 21 21.1 21 20V4C21 2.9 20.1 2 19 2ZM19 20H5V19H19V20ZM19 17H5V4H19V17Z"></path><path d="M13.1215 6H10.8785C10.5514 6 10.271 6.18692 10.0841 6.46729L7.14019 11.6075C7 11.8878 7 12.215 7.14019 12.8AFcmXsQttSXuBeYCL9fpa2rn5JrDwwoihMerrwF48V7Ar1EKNTZyGa6G2tMFMhEZNEReroTLe2gPSMQw6VZLSD65AyBqzD.6449 14.7383 15.8318 14.4579L16.9533 12.4953C17.0935 12.215 17.0935 11.8878 16.9533 11.6075L13.9159 6.46729C13.7757 6.18692 13.4486 6 13.1215 6ZM10.1776 12.0748L12.0467 8.8972L13.8692 12.0748H10.1776Z"></path></svg>
+                             <span>My Drive</span>
+                          </a>
+                       </li>
+                       <li class=" ">
+                          <a href="" class="collapsed" data-toggle="collapse" aria-expanded="false">
+                            <svg class="a-s-fa-Ha-pa" width="20px" height="20px" viewBox="0 0 20 20" focusable="false" fill="#000000"><polygon points="8,5 13,10 8,15"></polygon></svg>
+                            <svg style="padding-right: 20px;" padding-right: 20px;width="24px" height="24px" viewBox="0 0 24 24" fill="#000000" focusable="false"><path d="M0 0h24v24H0z" fill="none"></path><path d="M4 6h18V4H4c-1.1 0-2 .9-2 2v11H0v3h14v-3H4V6zm19 2h-6c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h6c.55 0 1-.45 1-1V9c0-.55-.45-1-1-1zm-1 9h-4v-7h4v7z"></path></svg> 
+                            <span>My Computer</span>
+                          </a>
+                       </li>
+                       <li class=" ">
+                              <a href="" class="">
+                                <svg style="padding-right: 20px;" padding-right: 20px;width="24px" height="24px" viewBox="0 0 24 24" fill="#000000" focusable="false"><path d="M0 0h24v24H0z" fill="none"></path><path xmlns="http://www.w3.org/2000/svg" d="M15 8c0-1.8AFcmXsQttSXuBeYCL9fpa2rn5JrDwwoihMerrwF48V7Ar1EKNTZyGa6G2tMFMhEZNEReroTLe2gPSMQw6VZLSD65AyBqzD21-.03-.01-.06-.02-.1-.03A5.98 5.98 0 0 0 15 8zm1.66 5.13C18.03 14.06 19 15.32 19 17v3h4v-3c0-2.18-3.58-3.8AFcmXsQttSXuBeYCL9fpa2rn5JrDwwoihMerrwF48V7Ar1EKNTZyGa6G2tMFMhEZNEReroTLe2gPSMQw6VZLSD65AyBqzD1c-.2-.71-3.3-2-6-2M9 4c2.21 0 4 1.79 4 4s-1.79 4-4 4-4-1.79-4-4 1.79-4 4-4zm0 9c2.67 0 8 1.34 8 4v3H1v-3c0-2.66 5.33-4 8-4z"></path></svg>
+
+                                  <span>Shared With Me</span>
+                              </a>
+                       </li>
+                       <li class=" ">
+                              <a href="https://templates.iqonic.design/cloudbox/html/backend/page-folders.html" class="">
+                                <svg style="padding-right: 20px;" padding-right: 20px;width="24px" height="24px" viewBox="0 0 24 24" fill="#000000" focusable="false"><path d="M11.99 2C6.8AFcmXsQttSXuBeYCL9fpa2rn5JrDwwoihMerrwF48V7Ar1EKNTZyGa6G2tMFMhEZNEReroTLe2gPSMQw6VZLSD65AyBqzD8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"></path><path d="M0 0h24v24H0z" fill="none"></path><path d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z"></path></svg>
+                                  <span>Recent</span>
+                              </a>
+                       </li>
+                       <li class=" ">
+                              <a href="https://templates.iqonic.design/cloudbox/html/backend/page-favourite.html" class="">
+                                <svg style="padding-right: 20px;" padding-right: 20px;width="24px" height="24px" viewBox="0 0 24 24" focusable="false" fill="#000000"><path d="M22 9.24l-7.19-.62L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.63-7.03L22 9.24zM12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28L12 15.4z"></path></svg>
+                                  <span>Stared</span>
+                              </a>
+                       </li>
+                       <li class=" ">
+                              <a href="https://templates.iqonic.design/cloudbox/html/backend/page-delete.html" class="">
+                                <svg style="padding-right: 20px;" padding-right: 20px;width="24px" height="24px" viewBox="0 0 24 24" fill="#000000" focusable="false" class=" "><path d="M0 0h24v24H0z" fill="none"></path><path d="M15 4V3H9v1H4v2h1v13c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V6h1V4h-5zm2 15H7V6h10v13z"></path><path d="M9 8h2v9H9zm4 0h2v9h-2z" style=""></path></svg>
+                                  <span>Trash</span>
+                              </a>
+                       </li>
+                  </ul>
+              </nav>
+              <div class="sidebar-bottom">
+                  <h4 class="mb-2">
+                    <svg class="a-s-fa-Ha-pa a-ml-da-Q-c" width="24px" height="24px" viewBox="0 0 24 24" focusable="false" fill="#6f6f6f"><path d="M0 0h24v24H0z" fill="none"></path><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM19 18H6c-2.21 0-4-1.79-4-4s1.79-4 4-4h.71C7.37 7.69 9.48 6 12 6c3.04 0 5.5 2.46 5.5 5.5v.5H19c1.66 0 3 1.34 3 3s-1.34 3-3 3z"></path></svg>
+                    Storage
+                  </h4>
+                  <div class="iq-progress-bar mb-3">
+                      <span class="bg-primary iq-progress progress-1" data-percent="7" style="transition: width 2s ease 0s; width: 67%;">
+                      </span>
+                  </div>
+                  <p>2.1 / 15 GB Used</p>
+                  <a href="" class="btn btn-outline-primary view-more mt-4">Buy Storage</a>
+              </div>
+              <div class="p-3"></div>
+          </div><div class="scrollbar-track scrollbar-track-x" style="display: none;"><div class="scrollbar-thumb scrollbar-thumb-x" style="width: 260px; transform: translate3d(0px, 0px, 0px);"></div></div><div class="scrollbar-track scrollbar-track-y" style="display: none;"><div class="scrollbar-thumb scrollbar-thumb-y" style="height: 840px; transform: translate3d(0px, 0px, 0px);"></div></div></div>
+          </div>       <div class="iq-top-navbar">
+          <div class="iq-navbar-custom">
+              <nav class="navbar navbar-expand-lg navbar-light p-0">
+              <div class="iq-navbar-logo d-flex align-items-center justify-content-between">
+                  <i class=" wrapper-menu"><svg class="a-s-fa-Ha-pa" width="24px" height="24px" viewBox="0 0 24 24" focusable="false" fill="#000000"><path d="M3,5v14h18V5H3z M7,7v2H5V7H7z M5,13v-2h2v2H5z M5,15h2v2H5V15z M19,17H9v-2h10V17z M19,13H9v-2h10V13z M19,9H9V7h10V9z"></path></svg></i>
+                  <a href="https://templates.iqonic.design/cloudbox/html/backend/index.html" class="header-logo">
+                      <img src="./assets/logo.png" class="img-fluid rounded-normal light-logo" alt="logo">
+                      <img src="./assets/logo.png" class="img-fluid rounded-normal darkmode-logo d-none" alt="logo">
+                  </a>
+              </div>
+                  <div class="iq-search-bar device-search">
+                      
+                      <form>
+                          <div class="input-prepend input-append">
+                              <div class="btn-group">
+                                  <input class="dropdown-toggle search-query text search-input" type="text" placeholder="Search In Drive"><span class="search-replace"></span>
+                                  <a class="search-link" href="">
+                                    <svg focusable="false" height="24px" viewBox="0 0 24 24" width="24px" xmlns="http://www.w3.org/2000/svg"><path d="M20.8AFcmXsQttSXuBeYCL9fpa2rn5JrDwwoihMerrwF48V7Ar1EKNTZyGa6G2tMFMhEZNEReroTLe2gPSMQw6VZLSD65AyBqzD9.5,16 c1.8AFcmXsQttSXuBeYCL9fpa2rn5JrDwwoihMerrwF48V7Ar1EKNTZyGa6G2tMFMhEZNEReroTLe2gPSMQw6VZLSD65AyBqzD.5,14S5,11.99,5,9.5z"></path><path d="M0,0h24v24H0V0z" fill="none"></path></svg>
+                                  </a>
+                                  <a class="search-linkd" href="">
+                                    <svg class="Q6yead QJZfhe " width="24" height="24" viewBox="0 0 24 24" focusable="false"><path d="M3 17v2h6v-2H3zM3 5v2h10V5H3zm10 16v-2h8v-2h-8v-2h-2v6h2zM7 9v2H3v2h4v2h2V9H7zm14 4v-2H11v2h10zm-6-4h2V7h4V5h-4V3h-2v6z"></path></svg>
+                                  </a>
+                                  
+                              </div>
+                          </div>
+                      </form>
+                  </div>
+      
+                  <div class="d-flex align-items-center">
+                      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-label="Toggle navigation">
+                      <i class="ri-menu-3-line"></i>
+                      </button>
+                      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                          <ul class="navbar-nav ml-auto navbar-list align-items-center">
+                          <li class="nav-item nav-icon search-content">
+                              <a href="" class="search-toggle rounded" id="dropdownSearch" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                  <i class="ri-search-line"></i>
+                              </a>
+                              <div class="iq-search-bar iq-sub-dropdown dropdown-menu" aria-labelledby="dropdownSearch">
+                                  <form action="" class="searchbox p-2">
+                                      <div class="form-group mb-0 position-relative">
+                                      <input type="text" class="text search-input font-size-12" placeholder="type here to search...">
+                                      <a href="" class="search-link"><i class="las la-search"></i></a> 
+                                      </div>
+                                  </form>
+                              </div>
+                          </li> 
+                          <li class="nav-item nav-icon dropdown">
+                              <a href="javascript:void(0)"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              <svg class="wo35tf" xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="#000000" focusable="false"><path fill="none" d="M0 0h24v24H0z"></path><path d="M11 18h2v-2h-2v2zm1-16C6.8AFcmXsQttSXuBeYCL9fpa2rn5JrDwwoihMerrwF48V7Ar1EKNTZyGa6G2tMFMhEZNEReroTLe2gPSMQw6VZLSD65AyBqzD 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z"></path></svg></a>
+                          </li>
+                          <li class="nav-item nav-icon dropdown"> 
+                              <a href="javascript:void(0)" class="" id="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              <svg class=" a-s-fa-Ha-pa" width="24px" height="24px" viewBox="0 0 24 24" fill="#000000" focusable="false"><path d="M13.85 22.25h-3.7c-.74 0-1.36-.54-1.45-1.27l-.27-1.89c-.27-.14-.53-.29-.79-.8AFcmXsQttSXuBeYCL9fpa2rn5JrDwwoihMerrwF48V7Ar1EKNTZyGa6G2tMFMhEZNEReroTLe2gPSMQw6VZLSD65AyBqzD3-.02-.46 0-.15.01-.31.02-.46l-1.52-1.19c-.59-.8AFcmXsQttSXuBeYCL9fpa2rn5JrDwwoihMerrwF48V7Ar1EKNTZyGa6G2tMFMhEZNEReroTLe2gPSMQw6VZLSD65AyBqzD.09-.7.71-1.25 1.44-1.25h3.7c.74 0 1.36.54 1.8AFcmXsQttSXuBeYCL9fpa2rn5JrDwwoihMerrwF48V7Ar1EKNTZyGa6G2tMFMhEZNEReroTLe2gPSMQw6VZLSD65AyBqzD 1.88l-1.52 1.19c.01.15.02.3.02.8AFcmXsQttSXuBeYCL9fpa2rn5JrDwwoihMerrwF48V7Ar1EKNTZyGa6G2tMFMhEZNEReroTLe2gPSMQw6VZLSD65AyBqzD26.17-.52.32-.78.46l-.27 1.91c-.1.68-.72 1.22-1.46 1.22zm-3.23-2h2.76l.37-2.55.53-.22c.8AFcmXsQttSXuBeYCL9fpa2rn5JrDwwoihMerrwF48V7Ar1EKNTZyGa6G2tMFMhEZNEReroTLe2gPSMQw6VZLSD65AyBqzD-.06-.78l-.07-.56 2.03-1.58-1.39-2.4-2.39.96-.45-.35c-.8AFcmXsQttSXuBeYCL9fpa2rn5JrDwwoihMerrwF48V7Ar1EKNTZyGa6G2tMFMhEZNEReroTLe2gPSMQw6VZLSD65AyBqzD-2.38-.95-1.39 2.39 2.03 1.58-.07.56a7 7 0 0 0-.06.79c0 .26.02.53.06.78l.07.56-2.03 1.58 1.38 2.4 2.39-.96.45.35c.43.33.86.58 1.33.77l.53.22.38 2.55z"></path><circle cx="12" cy="12" r="3.5"></circle></svg></a>
+                          </li>
+                          <li class="nav-item nav-icon dropdown"> 
+                              <a href="javascript:void(0)" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              <svg class="gb_Ne"  width="24px" height="24px focusable="false" viewBox="0 0 24 24"><path d="M6,8c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM12,20c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM6,20c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM6,14c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM12,14c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM16,6c0,1.1 0.9,2 2,2s2,-0.9 2,-2 -0.9,-2 -2,-2 -2,0.9 -2,2zM12,8c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM18,14c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM18,20c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2z"></path></svg></a>
+                          </li>
+                          <li class="nav-item nav-icon dropdown caption-content">
+                              <a href="javascript:void(0)" class="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                  <div class="caption bg-primary line-height">P</div>
+                              </a>
+                          </li>
+                          </ul>                     
+                      </div> 
+                  </div>
+              </nav>
+          </div>
+      </div>
+      <div class="content-page">
+        <div class="container-fluid">
+            <div class="row">
+                <div style=" margin-top: -15px; border-bottom: 0.1em solid #DADCE0;" class="col-lg-12">
+                    <div class="card-transparent card-block card-stretch card-height mb-1">
+                        <div class="d-flex justify-content-between">                             
+                            <div class="select-dropdown input-prepend input-append">
+                                <div class="btn-group">
+                                  <label data-toggle="dropdown">
+                                    <div class="dropdown-toggle search-query">Shared with me
+                                      <svg class=" a-s-fa-Ha-pa" width="24px" height="24px" viewBox="0 0 24 24" focusable="false" fill="#000000"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg>BD OFFICE 2022
+                                      <svg class="a-s-fa-Ha-pa" width="20px" height="20px" viewBox="0 0 20 20" focusable="false" fill="#000000"><polygon points="5,8 10,13 15,8"></polygon></svg>
+                                      <svg width="18px" height="18px" viewBox="0 0 24 24" focusable="false"><path fill="#000000" d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"></path></svg>
+                                    </div>
+                                  </label>
+                                </div>
+                            </div>
+                            <div class="dashboard1-dropdown d-flex align-items-center">
+                                <div class="dashboard1-info">
+                                    <svg class="a-s-fa-Ha-pa" width="24px" height="24px" viewBox="0 0 24 24" focusable="false" fill="#000000"><path d="M3,5v14h18V5H3z M7,7v2H5V7H7z M5,13v-2h2v2H5z M5,15h2v2H5V15z M19,17H9v-2h10V17z M19,13H9v-2h10V13z M19,9H9V7h10V9z"></path></svg>
+                                 </div>
+
+                                 <div class="dashboard1-info">
+                                    <svg class="a-s-fa-Ha-pa" width="24px" height="24px" viewBox="0 0 24 24" fill="#000000"><path d="M0 0h24v24H0z" fill="none"></path><path d="M11 17h2v-6h-2v6zm1-15C6.8AFcmXsQttSXuBeYCL9fpa2rn5JrDwwoihMerrwF48V7Ar1EKNTZyGa6G2tMFMhEZNEReroTLe2gPSMQw6VZLSD65AyBqzD 3.59 8 8-3.59 8-8 8zM11 9h2V7h-2v2z"></path></svg>
+                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="col-lg-12">
+                    <div class="card-transparent card-block card-stretch card-height mb-1">
+                        <div class="d-flex justify-content-between">                             
+                            <div class="select-dropdown input-prepend input-append">
+                                <div class="btn-group">
+                                  <label data-toggle="dropdown">
+                                    <div class="dropdown-toggle search-query">Files
+                                    </div>
+                                  </label>
+                                </div>
+                            </div>
+                            <div class="dashboard1-dropdown d-flex align-items-center">
+                                Name
+                                <svg class="a-s-fa-Ha-pa" width="18px" height="18px" viewBox="0 0 48 8AFcmXsQttSXuBeYCL9fpa2rn5JrDwwoihMerrwF48V7Ar1EKNTZyGa6G2tMFMhEZNEReroTLe2gPSMQw6VZLSD65AyBqzD24l-2.82-2.82L26 32.34V8h-4v24.34L10.84 21.16 8 24l16 16 16-16z"></path></svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                  <div class="card card-block card-stretch card-height">
+                      <div class="card-body image-thumb">
+                          <a href="https://dos.portal.gov.bd/sites/default/files/files/dos.portal.gov.bd/page/fc73aeb5_8bb7_4495_8023_7649abf517da/2020-06-04-18-14-7ced2478eee0595affe8c1711213c691.pdf" >
+                              <div class="mb-4 text-center p-3 rounded iq-thumb">
+                                  <div class="iq-image-overlay"></div>
+                                  <img src="./assets/pdf.png" class="img-fluid" alt="image1">       
+                              </div>
+                              <h6> TERMS/POLICY BD MERCHANT SHIPPING ACT 2020.pdf<br><b>47 MB</b></h6> 
+                          </a>             
+                      </div>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                  <div class="card card-block card-stretch card-height">
+                      <div class="card-body image-thumb">
+                          <a href="https://cdn.discordapp.com/attachments/823388507535441924/1016926841115775017/AM.LIST_20229023048202.PERU_EAGLESHIPPMENT.JPG.img" >
+                              <div class="mb-4 text-center p-3 rounded iq-thumb">
+                                  <div class="iq-image-overlay"></div>
+                                  <img src="./assets/jpgz.png" class="img-fluid" alt="image1">
+                              </div>
+                              <h6>AM.LIST_20229023048202.PERU_EAGLESHIPPMENT.JPG <br><b>9MB</b></h6>
+                          </a>
+                      </div>
+                  </div>
+                </div>
+                          </a>       
+                      </div>
+                  </div>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+    <script src="./assets/backend-bundle.min.js.download"></script>
+    
+    <!-- Chart Custom JavaScript -->
+    <script src="./assets/customizer.js.download"></script>
+    
+    <!-- Chart Custom JavaScript -->
+    <script src="./assets/chart-custom.js.download"></script>
+    
+    <!--PDF-->
+    <script src="./assets/pdf.js.download"></script>
+    <!--Docs-->
+    <script src="./assets/jszip-utils.js.download"></script>
+    <script src="./assets/mammoth.browser.min.js.download"></script>
+    <!--PPTX-->
+    <script src="./assets/filereader.js.download"></script>
+    <script src="./assets/d3.min.js.download"></script>
+    <script src="./assets/nv.d3.min.js.download"></script>
+    <script src="./assets/pptxjs.js.download"></script>
+    <script src="./assets/divs2slides.js.download"></script>
+    <!--All Spreadsheet -->
+    <script src="./assets/handsontable.full.min.js.download"></script>
+    <script src="./assets/xlsx.full.min.js.download"></script>
+    <!--Image viewer-->
+    <script src="./assets/jquery.verySimpleImageViewer.js.download"></script>
+    <!--officeToHtml-->
+    <script src="./assets/officeToHtml.js.download"></script>
+    <script src="./assets/doc-viewer.js.download"></script>
+    <!-- app JavaScript -->
+    <script src="./assets/app.js.download"></script>
+     <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title">Title</h4>
+                    <div>
+                        <a class="btn" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <div id="resolte-contaniner" style="height: 500px;" class="overflow-auto">
+                        File not found
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body></html>
